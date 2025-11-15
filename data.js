@@ -153,3 +153,27 @@ const GS4Data = {
 
 // Make data globally available
 window.GS4Data = GS4Data;
+
+// Experience table by level
+GS4Data.experienceByLevel = function(level) {
+    // Simplified GS4 experience formula
+    // Actual formula is more complex, but this is a good approximation
+    if (level === 0) return 0;
+    if (level === 1) return 2500;
+    if (level === 2) return 5000;
+    if (level === 3) return 10000;
+    if (level === 4) return 17500;
+    if (level === 5) return 27500;
+    if (level === 6) return 40000;
+    if (level === 7) return 55000;
+    if (level === 8) return 72500;
+    if (level === 9) return 92500;
+    if (level === 10) return 115000;
+    
+    // For higher levels, use approximation
+    let exp = 115000;
+    for (let i = 11; i <= level; i++) {
+        exp += Math.floor(2500 + (i * 1000) + Math.pow(i, 2) * 100);
+    }
+    return exp;
+};

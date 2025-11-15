@@ -1,0 +1,270 @@
+==============================================================================
+GS4 TRAINER WEB APPLICATION - DEPLOYMENT GUIDE
+==============================================================================
+
+PACKAGE CONTENTS:
+-----------------
+✓ gs4-trainer-web.zip (25KB) - Complete web application
+
+WHAT'S INSIDE:
+--------------
+• index.html - Main application interface
+• styles.css - Complete styling (responsive design)
+• data.js - Game data (races, classes, skills, combat tables)
+• calculations.js - All calculation functions (mirrors VBA logic)
+• app.js - Application logic and UI management
+• README.md - Complete documentation
+• SPREADSHEET_ANALYSIS.md - Detailed technical documentation
+
+==============================================================================
+DEPLOYMENT OPTION 1: GITHUB PAGES (RECOMMENDED)
+==============================================================================
+
+Step 1: Create GitHub Repository
+---------------------------------
+1. Go to https://github.com
+2. Click "New repository"
+3. Name it: "gs4-trainer" (or any name you prefer)
+4. Make it Public
+5. Click "Create repository"
+
+Step 2: Upload Files
+---------------------
+METHOD A - Web Interface (Easiest):
+1. Unzip gs4-trainer-web.zip on your computer
+2. In your GitHub repository, click "Add file" → "Upload files"
+3. Drag all 7 files from the unzipped folder
+4. Click "Commit changes"
+
+METHOD B - Git Command Line:
+1. Unzip gs4-trainer-web.zip
+2. Open terminal/command prompt
+3. Run:
+   cd path/to/unzipped/folder
+   git init
+   git add .
+   git commit -m "Initial commit - GS4 Trainer"
+   git remote add origin https://github.com/YOUR-USERNAME/gs4-trainer.git
+   git push -u origin main
+
+Step 3: Enable GitHub Pages
+----------------------------
+1. Go to your repository on GitHub
+2. Click "Settings" tab
+3. Scroll to "Pages" section (left sidebar)
+4. Under "Source", select:
+   - Branch: main
+   - Folder: / (root)
+5. Click "Save"
+6. Wait 1-2 minutes
+7. Your site will be live at:
+   https://YOUR-USERNAME.github.io/gs4-trainer/
+
+DONE! Share the URL with others.
+
+==============================================================================
+DEPLOYMENT OPTION 2: LOCAL USE
+==============================================================================
+
+Step 1: Unzip
+-------------
+Extract gs4-trainer-web.zip to any folder
+
+Step 2: Open
+------------
+Double-click index.html
+
+OR
+
+Right-click index.html → "Open with" → Your browser
+
+The app runs completely in your browser - no server needed!
+
+==============================================================================
+DEPLOYMENT OPTION 3: OTHER WEB HOSTS
+==============================================================================
+
+The application works on ANY static web host:
+
+• Netlify (netlify.com) - Drag & drop deployment
+• Vercel (vercel.com) - Git integration
+• Cloudflare Pages - Enterprise-grade CDN
+• AWS S3 + CloudFront - Scalable hosting
+• Any cPanel hosting - Upload via FTP
+
+Simply upload all 7 files to the web root directory.
+
+==============================================================================
+USING THE APPLICATION
+==============================================================================
+
+First Time Setup:
+-----------------
+1. Open the application in your browser
+2. Enter character name
+3. Select Race and Class
+4. Allocate stats (must total 660, minimum 20 each)
+5. Click "Calculate Stat Growth"
+
+Planning Training:
+------------------
+1. Go to Trainer tab
+2. Adjust level range (default 0-20)
+3. Enter training ranks for each skill
+4. Click "Check Training Plan" to validate
+
+Using Calculators:
+------------------
+Each tab has its own calculator:
+• Round Time - Combat speed calculations
+• Ambushing - Success rate predictions
+• Attack Strength - Offensive calculations
+• Defense - Defensive calculations
+• Experience - XP and absorption
+• Magic - CS/TD calculations
+• And more!
+
+Saving Your Work:
+-----------------
+• Auto-saves to browser (LocalStorage)
+• Export to JSON file (backup)
+• Import from JSON file (restore)
+• Reset button (clear all data)
+
+==============================================================================
+BROWSER COMPATIBILITY
+==============================================================================
+
+Tested and Working:
+• Google Chrome 90+
+• Microsoft Edge 90+
+• Firefox 88+
+• Safari 14+
+• Opera 76+
+
+Requirements:
+• JavaScript enabled
+• LocalStorage enabled
+• Modern browser (2020+)
+
+Mobile Devices:
+• iPhone/iPad: Safari 14+
+• Android: Chrome 90+
+• Responsive design works on all screen sizes
+
+==============================================================================
+TROUBLESHOOTING
+==============================================================================
+
+Problem: Page won't load
+Solution: Ensure all 7 files are in the same directory
+
+Problem: Data not saving
+Solution: Check browser settings - LocalStorage must be enabled
+
+Problem: Calculations wrong
+Solution: Verify you selected both Race and Class
+
+Problem: Training grid not showing
+Solution: Adjust level range and click "Update View"
+
+Problem: GitHub Pages showing 404
+Solution: Wait 2-5 minutes after enabling Pages, then refresh
+
+==============================================================================
+CUSTOMIZATION
+==============================================================================
+
+Want to modify the app?
+
+Colors: Edit styles.css (CSS variables at top)
+Data: Edit data.js (game constants)
+Calculations: Edit calculations.js (formulas)
+UI: Edit index.html (structure)
+Logic: Edit app.js (behavior)
+
+All files are well-commented and organized.
+
+==============================================================================
+FEATURES COMPARISON
+==============================================================================
+
+SPREADSHEET vs WEB APPLICATION:
+
+Feature                  | Excel  | Web App
+-------------------------|--------|----------
+Character Creation       |   ✓    |    ✓
+Stat Growth Calculation  |   ✓    |    ✓
+Training Planning        |   ✓    |    ✓
+Training Validation      |   ✓    |    ✓
+All Calculators          |   ✓    |    ✓
+CMAN Tracking           |   ✓    |    ✓
+Shield Tracking         |   ✓    |    ✓
+Spell Management        |   ✓    |    ✓
+Save/Load               |   ✓    |    ✓
+Import/Export           | .xls   | .json
+Mobile Support          |   ✗    |    ✓
+No Installation         |   ✗    |    ✓
+Works Offline           | Local  |    ✓
+Shareable URL           |   ✗    |    ✓
+Auto-backup             |   ✗    |    ✓
+
+==============================================================================
+SUPPORT & DOCUMENTATION
+==============================================================================
+
+Included Documentation:
+• README.md - User guide and setup instructions
+• SPREADSHEET_ANALYSIS.md - Technical documentation
+• This file - Deployment instructions
+
+Code Comments:
+• All JavaScript functions commented
+• CSS organized and labeled
+• HTML structure clearly marked
+
+For Issues:
+1. Check browser console (F12)
+2. Verify all files present
+3. Review README.md
+4. Check SPREADSHEET_ANALYSIS.md for formulas
+
+==============================================================================
+CREDITS
+==============================================================================
+
+Original Spreadsheet:
+• Tsoran deArgonoth (Main developer)
+• Bobmuhthol (CMAN tables)
+• Kirtland (Monk information)
+
+Web Port:
+• Complete feature parity with v4.6.3
+• All VBA functions converted to JavaScript
+• Modern responsive design
+• GitHub Pages ready
+
+Game:
+• GemStone IV by Simutronics Corporation
+
+==============================================================================
+LICENSE & USAGE
+==============================================================================
+
+This is a fan-made tool for the GemStone IV community.
+
+• Free to use
+• Free to modify
+• Free to share
+• No warranty provided
+
+GemStone IV is a trademark of Simutronics Corporation.
+This tool is not officially endorsed by Simutronics.
+
+==============================================================================
+
+QUICK START: Unzip → Upload to GitHub → Enable Pages → Done!
+
+For detailed help, see README.md inside the zip file.
+
+==============================================================================

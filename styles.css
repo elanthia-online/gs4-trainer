@@ -211,6 +211,10 @@ select {
     transition: border-color 0.3s ease;
 }
 
+input[type="number"] {
+    min-width: 80px; /* Ensure space for 3 digits + arrows */
+}
+
 input[type="text"]:focus,
 input[type="number"]:focus,
 select:focus {
@@ -263,6 +267,7 @@ select:focus {
     border-radius: 4px;
     font-size: 1rem;
     font-weight: bold;
+    min-width: 80px; /* Ensure space for 3 digits + arrows */
 }
 
 .stat-growth {
@@ -273,6 +278,27 @@ select:focus {
 }
 
 /* Training Grid */
+.training-info-bar {
+    background: var(--bg-color);
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.training-info {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.training-info span {
+    padding: 0.5rem 1rem;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
 .training-controls {
     display: flex;
     justify-content: space-between;
@@ -301,7 +327,7 @@ select:focus {
 
 .training-row {
     display: grid;
-    grid-template-columns: 200px repeat(auto-fill, 50px);
+    grid-template-columns: 200px repeat(auto-fill, 70px); /* Increased from 50px to 70px */
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -330,7 +356,7 @@ select:focus {
 
 .training-cell input {
     width: 100%;
-    max-width: 40px;
+    min-width: 60px; /* Ensure space for 3 digits + arrows */
     padding: 0.2rem;
     text-align: center;
     border: 1px solid var(--border-color);

@@ -47,22 +47,33 @@ class GS4Trainer {
         document.getElementById('class-select').addEventListener('change', (e) => {
             this.character.classId = parseInt(e.target.value);
             this.onClassChange();
+            this.updateAllCalculators();
             this.saveCharacter();
         });
 
         document.getElementById('race-select').addEventListener('change', (e) => {
             this.character.raceId = parseInt(e.target.value);
+            this.updateAllCalculators();
             this.saveCharacter();
         });
 
         document.getElementById('current-level').addEventListener('change', (e) => {
             this.character.currentLevel = parseInt(e.target.value);
+            
+            // Auto-update experience based on level
+            const newExp = GS4Data.experienceByLevel(this.character.currentLevel);
+            this.character.experience = newExp;
+            document.getElementById('experience').value = newExp;
+            
+            this.updateStatGrowthDisplay();
+            this.updateAllCalculators();
             this.saveCharacter();
         });
 
         document.getElementById('target-level').addEventListener('change', (e) => {
             this.character.targetLevel = parseInt(e.target.value);
             this.renderTrainingGrid();
+            this.updateAllCalculators();
             this.saveCharacter();
         });
 
@@ -85,6 +96,11 @@ class GS4Trainer {
         document.getElementById('calc-stats-btn').addEventListener('click', () => this.calculateStatGrowth());
         document.getElementById('check-plan-btn').addEventListener('click', () => this.checkTrainingPlan());
         document.getElementById('update-range-btn').addEventListener('click', () => this.renderTrainingGrid());
+        
+        // Training points level selector
+        document.getElementById('training-points-level')?.addEventListener('change', (e) => {
+            this.updateTrainingPointsDisplay(parseInt(e.target.value) || 1);
+        });
         
         document.getElementById('save-btn').addEventListener('click', () => this.saveCharacter());
         document.getElementById('load-btn').addEventListener('click', () => this.promptLoadCharacter());
@@ -112,6 +128,53 @@ class GS4Trainer {
         // Update tab content
         document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
         document.getElementById(`${tabName}-tab`).classList.add('active');
+        
+        // Auto-populate calculator fields when switching tabs
+        this.autoPopulateCalculator(tabName);
+    }
+
+    autoPopulateCalculator(tabName) {
+        const level = this.character.currentLevel || 10;
+        
+        // Auto-populate common fields
+        switch(tabName) {
+            case 'roundtime':
+            case 'ambush':
+            case 'lockpicking':
+            case 'attack':
+            case 'defense':
+            case 'runestaff':
+            case 'experience':
+            case 'magic':
+                // Set target level to current level if still default
+                const targetLevelMap = {
+                    'roundtime': 'rt-target-level',
+                    'ambush': 'ambush-target-level',
+                    'lockpicking': 'lock-target-level',
+                    'attack': 'as-target-level',
+                    'defense': 'ds-target-level',
+                    'runestaff': 'rs-target-level',
+                    'experience': 'exp-target-level',
+                    'magic': 'magic-target-level'
+                };
+                
+                const fieldId = targetLevelMap[tabName];
+                if (fieldId) {
+                    const field = document.getElementById(fieldId);
+                    if (field) {
+                        field.value = level;
+                    }
+                }
+                
+                // For ambush, also set your level
+                if (tabName === 'ambush') {
+                    const yourLevelField = document.getElementById('ambush-your-level');
+                    if (yourLevelField) {
+                        yourLevelField.value = level;
+                    }
+                }
+                break;
+        }
     }
 
     validateAndUpdateStats() {
@@ -141,17 +204,9 @@ class GS4Trainer {
             );
             
             this.character.statGrowth[statName] = growth;
-            
-            // Update display
-            const growthSpan = document.getElementById(`${statName}-growth`);
-            if (growthSpan) {
-                const level = this.character.currentLevel;
-                const grownValue = growth[level] || initialValue;
-                const increase = grownValue - initialValue;
-                growthSpan.textContent = increase > 0 ? `+${increase} at level ${level}` : '';
-            }
         }
 
+        this.updateStatGrowthDisplay();
         this.saveCharacter();
         alert('Stat growth calculated successfully!');
     }
@@ -208,11 +263,30 @@ class GS4Trainer {
                 input.min = '0';
                 input.max = '10';
                 input.value = this.character.training[skill.id]?.[level] || 0;
+                
+                // Get max training for this skill
+                const classType = GS4Data.classes[this.character.classId]?.type || 'none';
+                const maxTraining = skill[classType] || 0;
+                
                 input.addEventListener('change', (e) => {
                     if (!this.character.training[skill.id]) {
                         this.character.training[skill.id] = {};
                     }
-                    this.character.training[skill.id][level] = parseInt(e.target.value) || 0;
+                    const value = parseInt(e.target.value) || 0;
+                    this.character.training[skill.id][level] = value;
+                    
+                    // Visual feedback for overtraining
+                    if (value > maxTraining) {
+                        cell.classList.add('invalid');
+                        e.target.style.borderColor = 'var(--danger-color)';
+                        e.target.style.backgroundColor = '#ffe6e6';
+                    } else {
+                        cell.classList.remove('invalid');
+                        e.target.style.borderColor = '';
+                        e.target.style.backgroundColor = '';
+                    }
+                    
+                    this.updateTrainingPointsDisplay(level);
                     this.saveCharacter();
                 });
                 
@@ -222,6 +296,9 @@ class GS4Trainer {
             
             grid.appendChild(row);
         }
+        
+        // Update training points display for first visible level
+        this.updateTrainingPointsDisplay(startLevel);
     }
 
     renderCMANGrid() {
@@ -496,6 +573,74 @@ class GS4Trainer {
     onClassChange() {
         // Update training costs, etc.
         this.renderTrainingGrid();
+    }
+
+    updateAllCalculators() {
+        // Auto-populate calculator fields from character data
+        const level = this.character.currentLevel;
+        
+        // Update all target level fields
+        const targetLevelInputs = [
+            'rt-target-level', 'ambush-target-level', 'lock-target-level',
+            'as-target-level', 'ds-target-level', 'rs-target-level',
+            'exp-target-level', 'magic-target-level', 'ambush-your-level'
+        ];
+        
+        targetLevelInputs.forEach(id => {
+            const elem = document.getElementById(id);
+            if (elem && elem.value === '10') { // Only update if still default
+                elem.value = level;
+            }
+        });
+    }
+
+    updateStatGrowthDisplay() {
+        const statNames = ['str', 'con', 'dex', 'agl', 'dis', 'aur', 'log', 'int', 'wis', 'inf'];
+        
+        for (const statName of statNames) {
+            if (this.character.statGrowth[statName]) {
+                const level = this.character.currentLevel;
+                const growth = this.character.statGrowth[statName];
+                const initialValue = this.character.stats[statName];
+                const grownValue = growth[level] || initialValue;
+                const increase = grownValue - initialValue;
+                
+                const growthSpan = document.getElementById(`${statName}-growth`);
+                if (growthSpan) {
+                    if (increase > 0) {
+                        growthSpan.textContent = `+${increase} at level ${level} (${grownValue} total)`;
+                    } else {
+                        growthSpan.textContent = `Level ${level}: ${grownValue}`;
+                    }
+                }
+            }
+        }
+    }
+
+    updateTrainingPointsDisplay(level) {
+        const pointsUsed = GS4Calculations.calculateTotalPointsSpent(
+            this.character.training, 
+            level, 
+            this.character.classId
+        );
+        
+        const pointsAvailable = GS4Calculations.calculateTrainingPoints(
+            this.character.classId, 
+            level
+        );
+        
+        const pointsRemaining = pointsAvailable - pointsUsed;
+        
+        const usedElem = document.getElementById('training-points-used');
+        const availElem = document.getElementById('training-points-available');
+        const remainElem = document.getElementById('training-points-remaining');
+        
+        if (usedElem) usedElem.textContent = `Training Points Used: ${pointsUsed}`;
+        if (availElem) availElem.textContent = `Available: ${pointsAvailable}`;
+        if (remainElem) {
+            remainElem.textContent = `Remaining: ${pointsRemaining}`;
+            remainElem.className = pointsRemaining < 0 ? 'error' : pointsRemaining === 0 ? 'success' : '';
+        }
     }
 
     render() {

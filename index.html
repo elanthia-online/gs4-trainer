@@ -158,6 +158,13 @@
 
                 <div class="training-panel">
                     <h2>Skill Training</h2>
+                    <div class="training-info-bar">
+                        <div class="training-info">
+                            <span id="training-points-used">Training Points Used: 0</span>
+                            <span id="training-points-available">Available: 0</span>
+                            <span id="training-points-remaining">Remaining: 0</span>
+                        </div>
+                    </div>
                     <div class="training-controls">
                         <div>
                             <label for="level-range-start">View Levels:</label>
@@ -165,6 +172,10 @@
                             <span>to</span>
                             <input type="number" id="level-range-end" min="0" max="200" value="20" />
                             <button id="update-range-btn" class="btn btn-secondary">Update View</button>
+                        </div>
+                        <div>
+                            <label for="training-points-level">Show Points for Level:</label>
+                            <input type="number" id="training-points-level" min="0" max="200" value="1" />
                         </div>
                         <button id="check-plan-btn" class="btn btn-primary">✓ Check Training Plan</button>
                     </div>
