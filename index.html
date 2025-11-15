@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GemStone IV Character Trainer v4.6.3 - Web Edition</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>🗡️ GemStone IV Character Trainer</h1>
+            <div class="version">Version 4.6.3 - Web Edition</div>
+            <div class="header-actions">
+                <button id="save-btn" class="btn btn-primary">💾 Save Character</button>
+                <button id="load-btn" class="btn btn-primary">📂 Load Character</button>
+                <button id="reset-btn" class="btn btn-danger">🔄 Reset</button>
+                <button id="export-btn" class="btn btn-secondary">📥 Export JSON</button>
+                <button id="import-btn" class="btn btn-secondary">📤 Import JSON</button>
+            </div>
+        </header>
+
+        <nav class="tab-navigation">
+            <button class="tab-btn active" data-tab="trainer">Trainer</button>
+            <button class="tab-btn" data-tab="roundtime">Round Time</button>
+            <button class="tab-btn" data-tab="ambush">Ambushing</button>
+            <button class="tab-btn" data-tab="cman">CMAN</button>
+            <button class="tab-btn" data-tab="shield">Shield</button>
+            <button class="tab-btn" data-tab="lockpicking">Lockpicking</button>
+            <button class="tab-btn" data-tab="attack">Attack Strength</button>
+            <button class="tab-btn" data-tab="defense">Defense</button>
+            <button class="tab-btn" data-tab="runestaff">Runestaff</button>
+            <button class="tab-btn" data-tab="experience">Experience</button>
+            <button class="tab-btn" data-tab="magic">Magic</button>
+            <button class="tab-btn" data-tab="spells">Spells</button>
+        </nav>
+
+        <main class="content">
+            <!-- Trainer Tab -->
+            <div id="trainer-tab" class="tab-content active">
+                <div class="character-info-panel">
+                    <h2>Character Information</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="char-name">Character Name:</label>
+                            <input type="text" id="char-name" placeholder="Enter Character Name Here" />
+                        </div>
+                        <div class="form-group">
+                            <label for="class-select">Class:</label>
+                            <select id="class-select">
+                                <option value="0">Select Class</option>
+                                <option value="1">Warrior</option>
+                                <option value="2">Rogue</option>
+                                <option value="3">Wizard</option>
+                                <option value="4">Cleric</option>
+                                <option value="5">Empath</option>
+                                <option value="6">Sorcerer</option>
+                                <option value="7">Ranger</option>
+                                <option value="8">Bard</option>
+                                <option value="9">Monk</option>
+                                <option value="10">Paladin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="race-select">Race:</label>
+                            <select id="race-select">
+                                <option value="0">Select Race</option>
+                                <option value="1">Human</option>
+                                <option value="2">Giantman</option>
+                                <option value="3">Half-Elf</option>
+                                <option value="4">Dark Elf</option>
+                                <option value="5">Sylvan</option>
+                                <option value="6">Elf</option>
+                                <option value="7">Dwarf</option>
+                                <option value="8">Halfling</option>
+                                <option value="9">Aelotoi</option>
+                                <option value="10">Burghal Gnome</option>
+                                <option value="11">Forest Gnome</option>
+                                <option value="12">Half Krolvin</option>
+                                <option value="13">Erithian</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="current-level">Current Level:</label>
+                            <input type="number" id="current-level" min="0" max="200" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label for="target-level">Target Level:</label>
+                            <input type="number" id="target-level" min="0" max="200" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label for="experience">Experience:</label>
+                            <input type="number" id="experience" value="115000" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-panel">
+                    <h2>Statistics</h2>
+                    <div class="stats-info">
+                        <span id="stats-total">Total: 0</span>
+                        <span id="stats-error" class="error-message"></span>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-group">
+                            <label>STR (Strength):</label>
+                            <input type="number" class="stat-input" data-stat="str" min="0" max="100" value="0" />
+                            <span class="stat-growth" id="str-growth"></span>
+                        </div>
+                        <div class="stat-group">
+                            <label>CON (Constitution):</label>
+                            <input type="number" class="stat-input" data-stat="con" min="0" max="100" value="0" />
+                            <span class="stat-growth" id="con-growth"></span>
+                        </div>
+                        <div class="stat-group">
+                            <label>DEX (Dexterity):</label>
+                            <input type="number" class="stat-input" data-stat="dex" min="0" max="100" value="0" />
+                            <span class="stat-growth" id="dex-growth"></span>
+                        </div>
+                        <div class="stat-group">
+                            <label>AGL (Agility):</label>
+                            <input type="number" class="stat-input" data-stat="agl" min="0" max="100" value="0" />
+                            <span class="stat-growth" id="agl-growth"></span>
+                        </div>
+                        <div class="stat-group">
+                            <label>DIS (Discipline):</label>
+                            <input type="number" class="stat-input" data-stat="dis" min="0" max="100" value="0" />
+                            <span class="stat-growth" id="dis-growth"></span>
+                        </div>
+                        <div class="stat-group">
+                            <label>AUR (Aura):</label>
+                            <input type="number" class="stat-input" data-stat="aur" min="0" max="100" value="0" />
+                            <span class="stat-growth" id="aur-growth"></span>
+                        </div>
+                        <div class="stat-group">
+                            <label>LOG (Logic):</label>
+                            <input type="number" class="stat-input" data-stat="log" min="0" max="100" value="0" />
+                            <span class="stat-growth" id="log-growth"></span>
+                        </div>
+                        <div class="stat-group">
+                            <label>INT (Intuition):</label>
+                            <input type="number" class="stat-input" data-stat="int" min="0" max="100" value="0" />
+                            <span class="stat-growth" id="int-growth"></span>
+                        </div>
+                        <div class="stat-group">
+                            <label>WIS (Wisdom):</label>
+                            <input type="number" class="stat-input" data-stat="wis" min="0" max="100" value="0" />
+                            <span class="stat-growth" id="wis-growth"></span>
+                        </div>
+                        <div class="stat-group">
+                            <label>INF (Influence):</label>
+                            <input type="number" class="stat-input" data-stat="inf" min="0" max="100" value="0" />
+                            <span class="stat-growth" id="inf-growth"></span>
+                        </div>
+                    </div>
+                    <button id="calc-stats-btn" class="btn btn-primary">Calculate Stat Growth</button>
+                </div>
+
+                <div class="training-panel">
+                    <h2>Skill Training</h2>
+                    <div class="training-controls">
+                        <div>
+                            <label for="level-range-start">View Levels:</label>
+                            <input type="number" id="level-range-start" min="0" max="200" value="0" />
+                            <span>to</span>
+                            <input type="number" id="level-range-end" min="0" max="200" value="20" />
+                            <button id="update-range-btn" class="btn btn-secondary">Update View</button>
+                        </div>
+                        <button id="check-plan-btn" class="btn btn-primary">✓ Check Training Plan</button>
+                    </div>
+                    <div class="training-grid-container">
+                        <div id="training-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Round Time Calculator Tab -->
+            <div id="roundtime-tab" class="tab-content">
+                <h2>Round Time Calculator</h2>
+                <div class="calculator-panel">
+                    <h3>Physical Data</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Armor Weight:</label>
+                            <input type="number" id="rt-armor-weight" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label>Other Carried Weight:</label>
+                            <input type="number" id="rt-other-weight" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Target Level:</label>
+                            <input type="number" id="rt-target-level" value="10" />
+                        </div>
+                    </div>
+                    <h3>Weapon Modifiers</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Weapon Type:</label>
+                            <select id="rt-weapon-type">
+                                <option value="edged">Edged</option>
+                                <option value="blunt">Blunt</option>
+                                <option value="two-handed">Two-Handed</option>
+                                <option value="ranged">Ranged</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Weapon Speed:</label>
+                            <input type="number" id="rt-weapon-speed" value="3" step="0.1" />
+                        </div>
+                    </div>
+                    <h3>Spell Modifiers</h3>
+                    <div class="spell-modifiers">
+                        <label><input type="checkbox" id="rt-spell-haste" /> Haste</label>
+                        <label><input type="checkbox" id="rt-spell-celerity" /> Celerity</label>
+                    </div>
+                    <button id="calc-rt-btn" class="btn btn-primary">Calculate Round Time</button>
+                    <div id="rt-results" class="results-panel"></div>
+                </div>
+            </div>
+
+            <!-- Ambushing Tab -->
+            <div id="ambush-tab" class="tab-content">
+                <h2>Ambushing Calculator</h2>
+                <div class="calculator-panel">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Target Level:</label>
+                            <input type="number" id="ambush-target-level" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label>Your Level:</label>
+                            <input type="number" id="ambush-your-level" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label>Ambush Ranks:</label>
+                            <input type="number" id="ambush-ranks" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Hiding Ranks:</label>
+                            <input type="number" id="hiding-ranks" value="0" />
+                        </div>
+                    </div>
+                    <button id="calc-ambush-btn" class="btn btn-primary">Calculate Ambush</button>
+                    <div id="ambush-results" class="results-panel"></div>
+                </div>
+            </div>
+
+            <!-- CMAN Tab -->
+            <div id="cman-tab" class="tab-content">
+                <h2>Combat Maneuvers</h2>
+                <div id="cman-grid" class="ability-grid"></div>
+            </div>
+
+            <!-- Shield Tab -->
+            <div id="shield-tab" class="tab-content">
+                <h2>Shield Specializations</h2>
+                <div id="shield-grid" class="ability-grid"></div>
+            </div>
+
+            <!-- Lockpicking Tab -->
+            <div id="lockpicking-tab" class="tab-content">
+                <h2>Lockpicking Calculator</h2>
+                <div class="calculator-panel">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Target Level:</label>
+                            <input type="number" id="lock-target-level" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label>Lock Material:</label>
+                            <select id="lock-material">
+                                <option value="glaes">Glaes</option>
+                                <option value="golvern">Golvern</option>
+                                <option value="vaalin">Vaalin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Lore Bonus:</label>
+                            <select id="lock-lore">
+                                <option value="none">No Lore</option>
+                                <option value="other">Other Lore</option>
+                                <option value="self">Self Lore</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="calc-lock-btn" class="btn btn-primary">Calculate</button>
+                    <div id="lock-results" class="results-panel"></div>
+                </div>
+            </div>
+
+            <!-- Attack Strength Tab -->
+            <div id="attack-tab" class="tab-content">
+                <h2>Attack Strength Calculator</h2>
+                <div class="calculator-panel">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Target Level:</label>
+                            <input type="number" id="as-target-level" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label>Weapon Skill Ranks:</label>
+                            <input type="number" id="as-weapon-ranks" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Weapon Bonus:</label>
+                            <input type="number" id="as-weapon-bonus" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Stance:</label>
+                            <select id="as-stance">
+                                <option value="offensive">Offensive</option>
+                                <option value="advance">Advance</option>
+                                <option value="forward">Forward</option>
+                                <option value="neutral">Neutral</option>
+                                <option value="guarded">Guarded</option>
+                                <option value="defensive">Defensive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="calc-as-btn" class="btn btn-primary">Calculate AS</button>
+                    <div id="as-results" class="results-panel"></div>
+                </div>
+            </div>
+
+            <!-- Defense Tab -->
+            <div id="defense-tab" class="tab-content">
+                <h2>Defense Calculator</h2>
+                <div class="calculator-panel">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Target Level:</label>
+                            <input type="number" id="ds-target-level" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label>Shield Type:</label>
+                            <select id="ds-shield-type">
+                                <option value="0">None</option>
+                                <option value="1">Small</option>
+                                <option value="2">Medium</option>
+                                <option value="3">Large</option>
+                                <option value="4">Tower</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Shield Ranks:</label>
+                            <input type="number" id="ds-shield-ranks" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Dodge Ranks:</label>
+                            <input type="number" id="ds-dodge-ranks" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Stance:</label>
+                            <select id="ds-stance">
+                                <option value="offensive">Offensive</option>
+                                <option value="advance">Advance</option>
+                                <option value="forward">Forward</option>
+                                <option value="neutral">Neutral</option>
+                                <option value="guarded">Guarded</option>
+                                <option value="defensive">Defensive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="calc-ds-btn" class="btn btn-primary">Calculate DS</button>
+                    <div id="ds-results" class="results-panel"></div>
+                </div>
+            </div>
+
+            <!-- Runestaff Tab -->
+            <div id="runestaff-tab" class="tab-content">
+                <h2>Runestaff Defense Calculator</h2>
+                <div class="calculator-panel">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Target Level:</label>
+                            <input type="number" id="rs-target-level" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label>Magical Ranks Per Level:</label>
+                            <input type="number" id="rs-magic-ranks" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Runestaff Parry Ranks:</label>
+                            <input type="number" id="rs-parry-ranks" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Dodge Ranks:</label>
+                            <input type="number" id="rs-dodge-ranks" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Staff Bonus:</label>
+                            <input type="number" id="rs-staff-bonus" value="0" />
+                        </div>
+                        <div class="form-group">
+                            <label>Stance:</label>
+                            <select id="rs-stance">
+                                <option value="offensive">Offensive</option>
+                                <option value="advance">Advance</option>
+                                <option value="forward">Forward</option>
+                                <option value="neutral">Neutral</option>
+                                <option value="guarded">Guarded</option>
+                                <option value="defensive">Defensive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="calc-rs-btn" class="btn btn-primary">Calculate Defense</button>
+                    <div id="rs-results" class="results-panel"></div>
+                </div>
+            </div>
+
+            <!-- Experience Tab -->
+            <div id="experience-tab" class="tab-content">
+                <h2>Experience Calculator</h2>
+                <div class="calculator-panel">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Field Experience:</label>
+                            <input type="number" id="exp-field" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label>Target Level:</label>
+                            <input type="number" id="exp-target-level" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label>Critter Level:</label>
+                            <input type="number" id="exp-critter-level" value="1" />
+                        </div>
+                        <div class="form-group">
+                            <label>XP:</label>
+                            <input type="number" id="exp-xp" value="10" />
+                        </div>
+                    </div>
+                    <button id="calc-exp-btn" class="btn btn-primary">Calculate</button>
+                    <div id="exp-results" class="results-panel"></div>
+                </div>
+            </div>
+
+            <!-- Magic Tab -->
+            <div id="magic-tab" class="tab-content">
+                <h2>Magic Calculator (CS/TD)</h2>
+                <div class="calculator-panel">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Target Level:</label>
+                            <input type="number" id="magic-target-level" value="10" />
+                        </div>
+                        <div class="form-group">
+                            <label>Spell Circle:</label>
+                            <select id="magic-circle">
+                                <option value="minor-mental">Minor Mental</option>
+                                <option value="minor-spirit">Minor Spirit</option>
+                                <option value="major-spirit">Major Spirit</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Spell Trainings:</label>
+                            <input type="number" id="magic-trainings" value="0" />
+                        </div>
+                    </div>
+                    <button id="calc-magic-btn" class="btn btn-primary">Calculate CS/TD</button>
+                    <div id="magic-results" class="results-panel"></div>
+                </div>
+            </div>
+
+            <!-- Spells Tab -->
+            <div id="spells-tab" class="tab-content">
+                <h2>Spells</h2>
+                <div class="spells-controls">
+                    <label><input type="checkbox" id="use-known-spells" /> Use Known Spells</label>
+                    <button id="report-spell-btn" class="btn btn-primary">Report Spell Training</button>
+                </div>
+                <div id="spells-grid" class="spells-grid"></div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Original Spreadsheet by Tsoran deArgonoth | CMAN tables by Bobmuhthol | Monk Info by Kirtland</p>
+            <p>Web Edition - Open Source | <a href="https://github.com" target="_blank">GitHub</a></p>
+        </footer>
+    </div>
+
+    <input type="file" id="file-input" style="display: none;" accept=".json" />
+
+    <script src="data.js"></script>
+    <script src="calculations.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
